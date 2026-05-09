@@ -53,13 +53,15 @@ jobs:
         run: |
           docker push 735767724904.dkr.ecr.ap-south-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
 
+      - name: Debug AWS identity
+        run: aws sts get-caller-identity
+
       # 7. Update kubeconfig
       - name: Setup kubeconfig
         run: |
           aws eks update-kubeconfig \
             --name $EKS_CLUSTER \
-            --region $AWS_REGION \
-            --role-arn arn:aws:iam::735767724904:role/github-actions-eks-role
+            --region $AWS_REGION
 
           kubectl get nodes
 
