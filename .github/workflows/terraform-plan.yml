@@ -1,9 +1,11 @@
 name: Terraform Plan
 
 on:
-  pull_request:
+  branches:
     branches:
       - sadik
+    paths:
+      - "terraform/**"
 
 jobs:
   plan:
