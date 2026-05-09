@@ -30,16 +30,16 @@ resource "aws_iam_role" "github_actions" {
         Action = "sts:AssumeRoleWithWebIdentity"
 
         Condition = {
-        StringEquals = {
+          StringEquals = {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
-        }
+          }
 
-        StringLike = {
+          StringLike = {
             "token.actions.githubusercontent.com:sub" = [
-            "repo:${var.github_repo}:*",
-            "repo:${var.github_repo}:pull_request"
+              "repo:${var.github_repo}:ref:refs/heads/*",
+              "repo:${var.github_repo}:pull_request"
             ]
-        }
+          }
         }
       }
     ]
@@ -53,7 +53,7 @@ resource "aws_iam_role" "github_actions" {
 }
 
 ########################################
-# 3. Policy: ECR Access (Scoped)
+# 3. ECR Access Policy
 ########################################
 
 resource "aws_iam_role_policy" "ecr_policy" {
@@ -88,7 +88,7 @@ resource "aws_iam_role_policy" "ecr_policy" {
 }
 
 ########################################
-# 4. Policy: EKS Read Access (for kubeconfig)
+# 4. EKS Access (read cluster)
 ########################################
 
 resource "aws_iam_role_policy" "eks_policy" {
@@ -102,6 +102,47 @@ resource "aws_iam_role_policy" "eks_policy" {
         Effect = "Allow"
         Action = [
           "eks:DescribeCluster"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+########################################
+# 5. Terraform Backend Access (S3 + DynamoDB)
+########################################
+
+resource "aws_iam_role_policy" "terraform_state_policy" {
+  name = "github-terraform-state-policy"
+  role = aws_iam_role.github_actions.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:ListBucket"
+        ]
+        Resource = "arn:aws:s3:::shadikul-terraform-state-001"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject"
+        ]
+        Resource = "arn:aws:s3:::shadikul-terraform-state-001/*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:DeleteItem",
+          "dynamodb:UpdateItem"
         ]
         Resource = "*"
       }
