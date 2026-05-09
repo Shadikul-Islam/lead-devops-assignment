@@ -1,0 +1,18 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+
+# Sensitive files
+*.pem
+*.key
+
+# Node modules
+node_modules/
+
+# OS
+.DS_Store
+
+# Terraform variable overrides
+*.auto.tfvars
