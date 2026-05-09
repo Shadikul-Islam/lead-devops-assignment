@@ -21,6 +21,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::735767724904:role/github-actions-eks-role
+          aws-region: ap-south-1
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
