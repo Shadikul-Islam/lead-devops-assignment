@@ -230,17 +230,7 @@ resource "aws_iam_role_policy" "terraform_infra_policy" {
           "eks:*",
 
           # IAM
-          "iam:GetRole",
-          "iam:CreateRole",
-          "iam:DeleteRole",
-          "iam:AttachRolePolicy",
-          "iam:DetachRolePolicy",
-          "iam:PassRole",
-          "iam:TagRole",
-          "iam:GetOpenIDConnectProvider",
-          "iam:CreateOpenIDConnectProvider",
-          "iam:DeleteOpenIDConnectProvider",
-          "iam:ListOpenIDConnectProviders",
+          "iam:*",
 
           # Autoscaling
           "autoscaling:*",
