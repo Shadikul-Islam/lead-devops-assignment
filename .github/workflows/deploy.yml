@@ -1,0 +1,66 @@
+name: CI/CD - NodeJS EKS
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: ap-south-1
+  ECR_REPOSITORY: nodejs-app
+  EKS_CLUSTER: nodejs-eks-prod
+  IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. AWS OIDC login (NO keys)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::735767724904:role/github-actions-eks-role
+          aws-region: ${{ env.AWS_REGION }}
+
+      # 3. Login to ECR
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr get-login-password --region $AWS_REGION | \
+          docker login --username AWS --password-stdin 735767724904.dkr.ecr.ap-south-1.amazonaws.com
+
+      # 4. Build Docker image
+      - name: Build Image
+        run: |
+          docker build -t $ECR_REPOSITORY:$IMAGE_TAG ./app
+
+      # 5. Tag image
+      - name: Tag Image
+        run: |
+          docker tag $ECR_REPOSITORY:$IMAGE_TAG \
+          735767724904.dkr.ecr.ap-south-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+
+      # 6. Push image to ECR
+      - name: Push Image
+        run: |
+          docker push 735767724904.dkr.ecr.ap-south-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+
+      # 7. Update kubeconfig
+      - name: Setup kubeconfig
+        run: |
+          aws eks update-kubeconfig --name $EKS_CLUSTER --region $AWS_REGION
+
+      # 8. Deploy via Helm
+      - name: Deploy with Helm
+        run: |
+          helm upgrade --install nodejs-app ./helm/nodejs-app \
+            --set image.repository=735767724904.dkr.ecr.ap-south-1.amazonaws.com/$ECR_REPOSITORY \
+            --set image.tag=$IMAGE_TAG

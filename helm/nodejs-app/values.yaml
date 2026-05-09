@@ -1,5 +1,4 @@
 replicaCount: 2
-
 image:
   repository: 735767724904.dkr.ecr.ap-south-1.amazonaws.com/nodejs-app
   tag: v1
