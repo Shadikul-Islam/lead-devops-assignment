@@ -56,7 +56,12 @@ jobs:
       # 7. Update kubeconfig
       - name: Setup kubeconfig
         run: |
-          aws eks update-kubeconfig --name $EKS_CLUSTER --region $AWS_REGION
+          aws eks update-kubeconfig \
+            --name $EKS_CLUSTER \
+            --region $AWS_REGION \
+            --role-arn arn:aws:iam::735767724904:role/github-actions-eks-role
+
+          kubectl get nodes
 
       # 8. Deploy via Helm
       - name: Deploy with Helm
