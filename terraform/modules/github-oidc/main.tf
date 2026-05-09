@@ -150,6 +150,10 @@ resource "aws_iam_role_policy" "terraform_state_policy" {
   })
 }
 
+########################################
+# 6. Terraform Backend Permissions
+########################################
+
 resource "aws_iam_role_policy" "terraform_backend_policy" {
   name = "terraform-backend-policy"
   role = aws_iam_role.github_actions.id
@@ -192,6 +196,60 @@ resource "aws_iam_role_policy" "terraform_backend_policy" {
           "dynamodb:PutItem",
           "dynamodb:DeleteItem",
           "dynamodb:UpdateItem"
+        ]
+
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+########################################
+# 6. Terraform Infrastructure Permissions
+########################################
+
+resource "aws_iam_role_policy" "terraform_infra_policy" {
+  name = "terraform-infra-policy"
+  role = aws_iam_role.github_actions.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Effect = "Allow"
+
+        Action = [
+          # EC2
+          "ec2:*",
+
+          # ECR
+          "ecr:*",
+
+          # EKS
+          "eks:*",
+
+          # IAM
+          "iam:GetRole",
+          "iam:CreateRole",
+          "iam:DeleteRole",
+          "iam:AttachRolePolicy",
+          "iam:DetachRolePolicy",
+          "iam:PassRole",
+          "iam:TagRole",
+          "iam:GetOpenIDConnectProvider",
+          "iam:CreateOpenIDConnectProvider",
+          "iam:DeleteOpenIDConnectProvider",
+          "iam:ListOpenIDConnectProviders",
+
+          # Autoscaling
+          "autoscaling:*",
+
+          # Logs
+          "logs:*",
+
+          # CloudWatch
+          "cloudwatch:*"
         ]
 
         Resource = "*"
