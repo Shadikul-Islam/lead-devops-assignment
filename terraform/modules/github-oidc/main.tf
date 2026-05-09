@@ -35,7 +35,10 @@ resource "aws_iam_role" "github_actions" {
           }
 
           StringLike = {
-          "token.actions.githubusercontent.com:sub" = "repo:${var.github_repo}:ref:refs/heads/*"
+            "token.actions.githubusercontent.com:sub" = [
+              "repo:${var.github_repo}:ref:refs/heads/*",
+              "repo:${var.github_repo}:pull_request"
+            ]
           }
         }
       }
@@ -50,7 +53,7 @@ resource "aws_iam_role" "github_actions" {
 }
 
 ########################################
-# 3. Policy: ECR Access (Scoped)
+# 3. ECR Access Policy
 ########################################
 
 resource "aws_iam_role_policy" "ecr_policy" {
@@ -85,7 +88,7 @@ resource "aws_iam_role_policy" "ecr_policy" {
 }
 
 ########################################
-# 4. Policy: EKS Read Access (for kubeconfig)
+# 4. EKS Access (read cluster)
 ########################################
 
 resource "aws_iam_role_policy" "eks_policy" {
@@ -100,6 +103,145 @@ resource "aws_iam_role_policy" "eks_policy" {
         Action = [
           "eks:DescribeCluster"
         ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+########################################
+# 5. Terraform Backend Access (S3 + DynamoDB)
+########################################
+
+resource "aws_iam_role_policy" "terraform_state_policy" {
+  name = "github-terraform-state-policy"
+  role = aws_iam_role.github_actions.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:ListBucket"
+        ]
+        Resource = "arn:aws:s3:::shadikul-terraform-state-001"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject"
+        ]
+        Resource = "arn:aws:s3:::shadikul-terraform-state-001/*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:DeleteItem",
+          "dynamodb:UpdateItem"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+########################################
+# 6. Terraform Backend Permissions
+########################################
+
+resource "aws_iam_role_policy" "terraform_backend_policy" {
+  name = "terraform-backend-policy"
+  role = aws_iam_role.github_actions.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Effect = "Allow"
+
+        Action = [
+          "s3:ListBucket"
+        ]
+
+        Resource = [
+          "arn:aws:s3:::shadikul-terraform-state-001"
+        ]
+      },
+
+      {
+        Effect = "Allow"
+
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject"
+        ]
+
+        Resource = [
+          "arn:aws:s3:::shadikul-terraform-state-001/*"
+        ]
+      },
+
+      {
+        Effect = "Allow"
+
+        Action = [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:DeleteItem",
+          "dynamodb:UpdateItem"
+        ]
+
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+########################################
+# 6. Terraform Infrastructure Permissions
+########################################
+
+resource "aws_iam_role_policy" "terraform_infra_policy" {
+  name = "terraform-infra-policy"
+  role = aws_iam_role.github_actions.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Effect = "Allow"
+
+        Action = [
+          # EC2
+          "ec2:*",
+
+          # ECR
+          "ecr:*",
+
+          # EKS
+          "eks:*",
+
+          # IAM
+          "iam:*",
+
+          # Autoscaling
+          "autoscaling:*",
+
+          # Logs
+          "logs:*",
+
+          # CloudWatch
+          "cloudwatch:*"
+        ]
+
         Resource = "*"
       }
     ]

@@ -1,0 +1,41 @@
+name: Terraform Apply
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "terraform/**"
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::735767724904:role/github-actions-eks-role
+          aws-region: ap-south-1
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        working-directory: terraform/environments/prod
+        run: terraform init
+
+      - name: Terraform Plan (log only)
+        working-directory: terraform/environments/prod
+        run: terraform plan -no-color
+
+      - name: Terraform Apply
+        working-directory: terraform/environments/prod
+        run: terraform apply -auto-approve -input=false
