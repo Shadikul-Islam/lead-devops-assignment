@@ -53,9 +53,6 @@ jobs:
         run: |
           docker push 735767724904.dkr.ecr.ap-south-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
 
-      - name: Debug AWS identity
-        run: aws sts get-caller-identity
-
       # 7. Update kubeconfig
       - name: Setup kubeconfig
         run: |
