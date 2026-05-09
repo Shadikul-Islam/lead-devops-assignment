@@ -149,3 +149,53 @@ resource "aws_iam_role_policy" "terraform_state_policy" {
     ]
   })
 }
+
+resource "aws_iam_role_policy" "terraform_backend_policy" {
+  name = "terraform-backend-policy"
+  role = aws_iam_role.github_actions.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Effect = "Allow"
+
+        Action = [
+          "s3:ListBucket"
+        ]
+
+        Resource = [
+          "arn:aws:s3:::shadikul-terraform-state-001"
+        ]
+      },
+
+      {
+        Effect = "Allow"
+
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject"
+        ]
+
+        Resource = [
+          "arn:aws:s3:::shadikul-terraform-state-001/*"
+        ]
+      },
+
+      {
+        Effect = "Allow"
+
+        Action = [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:DeleteItem",
+          "dynamodb:UpdateItem"
+        ]
+
+        Resource = "*"
+      }
+    ]
+  })
+}
