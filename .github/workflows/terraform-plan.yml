@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - sadik
+  pull_request:
+    branches:
+      - master
     paths:
       - "terraform/**"
 
