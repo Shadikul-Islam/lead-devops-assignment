@@ -1,4 +1,4 @@
-# <p align=center>Cloud-Native DevOps Pipeline for Node.js on EKS using Terraform, Helm & GitHub Actions  <br> <br> </p> 
+# <p align=center>Cloud-Native DevOps Pipeline for Node.js on EKS using Terraform, Helm & GitHub Actions  <br></p> 
 
 ### Table of Contents
 
@@ -15,7 +15,6 @@
 | 09 | [Conclusion](#09)  |
 
 <br>
-
 ### <a name="01">Project Overview and Requirements</a>
 
 **Objective**
@@ -51,7 +50,6 @@ Kubernetes cluster.
 instructions.
 
 <br>
-
 ### <a name="02">Introduction</a>
 
 This project implements a production-ready cloud-native deployment pipeline for a Node.js application using Infrastructure as Code (IaC), Kubernetes, and CI/CD automation. The focus is on building a scalable, secure, and fully automated delivery workflow using modern DevOps practices.
@@ -70,12 +68,13 @@ Overall, this project demonstrates a real-world DevOps architecture focused on a
 
 **Cloud Platform**
 - Amazon Web Services (AWS)
-
+<br>
 **Infrastructure as Code**
 - Terraform
 - Terraform Modules (VPC, EKS, ECR, IAM, GitHub OIDC)
 - Remote state management (S3 + DynamoDB)
 
+<br>
 **Containerization**
 - Docker
 
@@ -108,7 +107,6 @@ Overall, this project demonstrates a real-world DevOps architecture focused on a
 - aws-auth ConfigMap (EKS access management)
 
 <br>
-
 ### <a name="04">Project Structure</a>
 
 ```text
@@ -160,9 +158,6 @@ Overall, this project demonstrates a real-world DevOps architecture focused on a
             ├── outputs.tf
             └── variables.tf
 ```
-
-<br>
-
 ### <a name="05">Repository Overview</a>
 
 This repository is organized to support a production-style DevOps workflow with clear separation between application code, infrastructure, and automation pipelines.
@@ -174,7 +169,6 @@ In the **Pull Requests** section, you can observe the branch-based workflow in a
 This structure ensures transparency, traceability, and controlled deployment across the entire system.
 
 <br>
-
 ### <a name="06">Setup and Deployment Process</a>
 
 **AWS EC2 Bastion Server Setup**
@@ -399,7 +393,6 @@ helm upgrade --install nodejs-app .
 <img src= "https://github.com/Shadikul-Islam/lead-devops-assignment/blob/master/images/image3.png">
 
 <br>
-
 ### <a name="07">Production Concepts Implemented</a>
 
 This project follows modern DevOps and cloud-native practices to ensure scalability, security, and maintainability in production environments.
@@ -428,7 +421,6 @@ This project follows modern DevOps and cloud-native practices to ensure scalabil
 - Helm package management for Kubernetes deployments
 
 <br>
-
 ### <a name="08">Infrastructure Deployment & CI/CD Pipeline</a>
 
 This project uses GitHub Actions and Terraform to manage AWS infrastructure and application deployments in a controlled and automated way.
@@ -490,7 +482,6 @@ Infrastructure changes applied to AWS (Production)
 - Separation of app and infra pipelines prevents unintended deployments
 
 <br>
-
 ### <a name="09">Conclusion</a>
 This project demonstrates the design and implementation of a production-grade DevOps platform on AWS using modern tools and industry-standard workflows.
 
