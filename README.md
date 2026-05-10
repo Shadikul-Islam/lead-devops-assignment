@@ -8,8 +8,11 @@
 | 02 | [Introduction](#02) |
 | 03 | [Tools and Technologies Used](#03) |
 | 04 | [Project Structure](#04) |
-| 05 | [Setup and Deployment Process](#05)  |
-| 06 | [Conclusion](#06)  |
+| 05 | [Repository Overview](#05) |
+| 06 | [Setup and Deployment Process](#06)  |
+| 07 | [Production Concepts Implemented](#07)  |
+| 08 | [Infrastructure Deployment & CI/CD Pipeline](#08)  |
+| 09 | [Conclusion](#09)  |
 
 <br>
 
@@ -100,8 +103,18 @@ Overall, this project demonstrates a real-world DevOps architecture focused on a
 ### <a name="04">Project Structure</a>
 
 
+### <a name="05">Repository Overview</a>
 
-### <a name="04">Setup and Deployment Process</a>
+This repository is organized to support a production-style DevOps workflow with clear separation between application code, infrastructure, and automation pipelines.
+
+If you navigate to the **Actions** tab, you will find the CI/CD pipelines that automate the entire deployment process, including Terraform planning, validation, and application deployment. Each workflow run provides visibility into what is being executed at every stage.
+
+In the **Pull Requests** section, you can observe the branch-based workflow in action. Feature changes are developed in the `sadik` branch and then merged into the `master` branch through a controlled review process. Each pull request typically includes Terraform plan output as a comment, allowing reviewers to clearly understand the infrastructure changes before approval.
+
+This structure ensures transparency, traceability, and controlled deployment across the entire system.
+
+
+### <a name="06">Setup and Deployment Process</a>
 
 **AWS EC2 Bastion Server Setup**
 
@@ -318,15 +331,108 @@ helm upgrade --install nodejs-app .
 Image_3
 
 
+### <a name="07">Production Concepts Implemented</a>
+
+This project follows modern DevOps and cloud-native practices to ensure scalability, security, and maintainability in production environments.
+
+**Core DevOps Practices**
+
+- Infrastructure as Code (IaC)
+- GitOps workflow
+- Branch-based deployment strategy
+- CI/CD automation
+- Pull Request (PR)-based infrastructure review
+- Immutable container deployments
+
+**Terraform & Infrastructure Management**
+
+- Remote Terraform state management
+- State locking for safe concurrent operations
+- Modular Terraform design for reusability and scalability
+- OIDC-based authentication for secure cloud access
+- AWS IAM role delegation for controlled permissions
+
+**Kubernetes & Cloud Native Stack**
+
+- Kubernetes orchestration for container workloads
+- Amazon EKS (Elastic Kubernetes Service) cluster operations
+- Helm package management for Kubernetes deployments
 
 
+### <a name="08">Infrastructure Deployment & CI/CD Pipeline</a>
+
+This project uses GitHub Actions and Terraform to manage AWS infrastructure and application deployments in a controlled and automated way.
+
+A dedicated AWS EC2 instance is used as a bastion host to securely access and manage resources within the private network. This ensures controlled administrative access to the DevOps infrastructure.
+
+**Branching Strategy**
+
+- `sadik` → Feature / development branch
+- `master` → Production branch
+
+**CI/CD Workflow**
+
+```text
+Developer Push to "sadik" branch
+        ↓
+GitHub Actions Triggered
+        ↓
+Change Detection (app / terraform)
+        ↓
+----------------------------------------
+If "app/" folder changes:
+    ↓
+Build & Deploy Application (based on pipeline logic)
+
+If "terraform/" folder changes:
+    ↓
+Run Terraform Plan (sadik branch)
+    ↓
+Plan output posted as PR comment
+        ↓
+Pull Request created to "master"
+        ↓
+Code review & approval
+        ↓
+Merge into "master"
+        ↓
+GitHub Actions triggers Terraform Apply
+        ↓
+Infrastructure changes applied to AWS (Production)
+```
+
+**Deployment Process If App Changes**
+
+- Pipeline triggers only when files inside app/ are modified
+- Builds and deploys application
+- No Terraform execution is triggered
+
+**Deployment Process If Infrastructure Changes**
+
+- Pipeline triggers only when files inside terraform/ are modified
+- On push to sadik branch terraform plan is executed
+- Plan output is automatically posted as a Pull Request comment
+- Terraform apply runs in production environment on merge to master
+
+**Safety & Control Mechanisms**
+- Terraform apply only runs on master branch
+- All infrastructure changes require PR review and approval
+- Plan output is always visible in PR comments before merge
+- Separation of app and infra pipelines prevents unintended deployments
 
 
+### <a name="09">Conclusion</a>
+This project demonstrates the design and implementation of a production-grade DevOps platform on AWS using modern tools and industry-standard workflows.
 
+The focus goes beyond simple application deployment and emphasizes real-world engineering practices, including:
 
+- Security best practices across infrastructure and access control
+- End-to-end automation using CI/CD pipelines
+- Infrastructure lifecycle management with Terraform
+- GitOps-driven workflow and pull request-based reviews
+- Scalable and maintainable production workflow design
 
-
-
+Overall, this project reflects practical DevOps engineering principles commonly applied in real-world cloud-native production environments.
 
 
 
