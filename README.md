@@ -13,8 +13,7 @@
 | 07 | [Production Concepts Implemented](#07)  |
 | 08 | [Infrastructure Deployment & CI/CD Pipeline](#08)  |
 | 09 | [Conclusion](#09)  |
-
-
+<br>
 ### <a name="01">Project Overview and Requirements</a>
 
 **Objective**
@@ -48,8 +47,7 @@ This application exposes a simple REST API and can be containerized using the pr
 Kubernetes cluster.
 - A `README.md` file including an architecture overview, key assumptions, and step-by-step deployment
 instructions.
-
-
+<br>
 ### <a name="02">Introduction</a>
 
 This project implements a production-ready cloud-native deployment pipeline for a Node.js application using Infrastructure as Code (IaC), Kubernetes, and CI/CD automation. The focus is on building a scalable, secure, and fully automated delivery workflow using modern DevOps practices.
