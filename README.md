@@ -134,6 +134,7 @@ Overall, this project demonstrates a real-world DevOps architecture focused on a
     │       ├── main.tf
     │       ├── outputs.tf
     │       ├── providers.tf
+    │       ├── terraform-plan-output.txt
     │       ├── terraform.tfvars
     │       ├── tfplan
     │       ├── variables.tf
@@ -163,6 +164,8 @@ This repository is organized to support a production-style DevOps workflow with 
 If you navigate to the **Actions** tab, you will find the CI/CD pipelines that automate the entire deployment process, including Terraform planning, validation, and application deployment. Each workflow run provides visibility into what is being executed at every stage.
 
 In the **Pull Requests** section, you can observe the branch-based workflow in action. Feature changes are developed in the `sadik` branch and then merged into the `master` branch through a controlled review process. Each pull request typically includes Terraform plan output as a comment, allowing reviewers to clearly understand the infrastructure changes before approval.
+
+The full Terraform plan can be reviewed by clicking here: [terraform-plan-output.txt](https://github.com/Shadikul-Islam/lead-devops-assignment/blob/master/terraform/environments/prod/terraform-plan-output.txt)
 
 This structure ensures transparency, traceability, and controlled deployment across the entire system.
 <br>
