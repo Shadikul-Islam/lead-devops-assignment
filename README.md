@@ -25,10 +25,14 @@ Design and implement a production-ready infrastructure and deployment pipeline f
 **Codebase**
 
 To begin this assignment, please download the minimal Node.js application. You will find the necessary files attached to the email containing these instructions. The application folder contains:
+
+```bash
 nodejs-app/
 ├──index.js
 ├──package.json
 └──Dockerfile
+```
+
 This application exposes a simple REST API and can be containerized using the provided Dockerfile.
 
 **Task Details**
@@ -46,6 +50,8 @@ Kubernetes cluster.
 - A `README.md` file including an architecture overview, key assumptions, and step-by-step deployment
 instructions.
 
+<br>
+
 ### <a name="02">Introduction</a>
 
 This project implements a production-ready cloud-native deployment pipeline for a Node.js application using Infrastructure as Code (IaC), Kubernetes, and CI/CD automation. The focus is on building a scalable, secure, and fully automated delivery workflow using modern DevOps practices.
@@ -58,6 +64,7 @@ A CI/CD pipeline is implemented using GitHub Actions for both application and in
 
 Overall, this project demonstrates a real-world DevOps architecture focused on automation, security, and operational efficiency using industry-standard cloud-native tools.
 
+<br>
 
 ### <a name="03">Tools & Technologies Used</a>
 
@@ -100,8 +107,61 @@ Overall, this project demonstrates a real-world DevOps architecture focused on a
 - Kubernetes RBAC
 - aws-auth ConfigMap (EKS access management)
 
+<br>
+
 ### <a name="04">Project Structure</a>
 
+```text
+.
+├── README.md
+├── app
+│   ├── Dockerfile
+│   ├── index.js
+│   ├── package-lock.json
+│   └── package.json
+├── helm
+│   └── nodejs-app
+│       ├── Chart.yaml
+│       ├── charts
+│       ├── templates
+│       │   ├── deployment.yaml
+│       │   └── service.yaml
+│       └── values.yaml
+├── images
+│   ├── image1.png
+│   ├── image2.png
+│   └── image3.png
+└── terraform
+    ├── environments
+    │   └── prod
+    │       ├── backend.tf
+    │       ├── main.tf
+    │       ├── outputs.tf
+    │       ├── providers.tf
+    │       ├── terraform.tfvars
+    │       ├── tfplan
+    │       ├── variables.tf
+    │       └── versions.tf
+    └── modules
+        ├── ecr
+        │   ├── main.tf
+        │   ├── outputs.tf
+        │   └── variables.tf
+        ├── eks
+        │   ├── main.tf
+        │   ├── outputs.tf
+        │   └── variables.tf
+        ├── github-oidc
+        │   ├── main.tf
+        │   ├── outputs.tf
+        │   └── variables.tf
+        └── vpc
+            ├── main.tf
+            ├── outputs.tf
+            └── variables.tf
+```
+
+<br>
 
 ### <a name="05">Repository Overview</a>
 
@@ -113,6 +173,7 @@ In the **Pull Requests** section, you can observe the branch-based workflow in a
 
 This structure ensures transparency, traceability, and controlled deployment across the entire system.
 
+<br>
 
 ### <a name="06">Setup and Deployment Process</a>
 
@@ -120,14 +181,14 @@ This structure ensures transparency, traceability, and controlled deployment acr
 
 A dedicated AWS EC2 instance is configured as a bastion host to securely access and manage resources within the private network. It provides controlled administrative access to the DevOps infrastructure while keeping internal components isolated from direct public exposure.
 
-## EC2 Instance Configuration
+**EC2 Instance Configuration**
 
 | Setting        | Recommendation          |
 |----------------|------------------------|
 | AMI            | Ubuntu 24.04           |
 | Instance Type  | t3.small               |
 | Storage        | 30 GB gp3              |
-| Elastic IP     | Enabled (recommended)  |
+| Elastic IP     | Enabled  |
 | Security Group | SSH only (port 22)     |
 | SSH Access     | Restricted to My IP    |
 | IAM Role       | AdministratorAccess    |
@@ -161,7 +222,9 @@ A dedicated AWS EC2 instance is configured as a bastion host to securely access 
 
 **kubectl Installation**
 
-```curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"```
+``` bash
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+```
 
 ```chmod +x kubectl```
 
@@ -177,9 +240,13 @@ A dedicated AWS EC2 instance is configured as a bastion host to securely access 
 
 **Terraform Installation**
 
-```wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg```
+```bash
+wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+```
 
-```echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list```
+```bash
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+```
 
 ```sudo apt update && sudo apt install terraform```
 
@@ -199,7 +266,7 @@ A dedicated AWS EC2 instance is configured as a bastion host to securely access 
 
 ```curl localhost:3000/health```
 
-Image_1
+<img src= "https://github.com/Shadikul-Islam/lead-devops-assignment/blob/master/images/image1.png"> <br>
 
 **Assign IAM Role to EC2 (Administrator Access)**
 
@@ -213,7 +280,7 @@ Steps:
 
 **Verify AWS Access**
 
-``aws sts get-caller-identity```
+```aws sts get-caller-identity```
 
 ```json
 {
@@ -246,7 +313,7 @@ aws dynamodb describe-table \
   --region ap-south-1
 ```
 
-Image_2
+<img src= "https://github.com/Shadikul-Islam/lead-devops-assignment/blob/master/images/image2.png"> <br>
 
 **Configure Terraform Backend**
 
@@ -266,6 +333,7 @@ Update the `backend.tf` file to enable:
 ```terraform plan -out=tfplan```
 
 **Terraform Apply**
+
 ```terraform apply tfplan```
 
 **Verify EKS Worker Nodes**
@@ -328,8 +396,9 @@ cd ~/dev/helm/nodejs-app
 helm upgrade --install nodejs-app .
 ```
 
-Image_3
+<img src= "https://github.com/Shadikul-Islam/lead-devops-assignment/blob/master/images/image3.png">
 
+<br>
 
 ### <a name="07">Production Concepts Implemented</a>
 
@@ -358,6 +427,7 @@ This project follows modern DevOps and cloud-native practices to ensure scalabil
 - Amazon EKS (Elastic Kubernetes Service) cluster operations
 - Helm package management for Kubernetes deployments
 
+<br>
 
 ### <a name="08">Infrastructure Deployment & CI/CD Pipeline</a>
 
@@ -379,16 +449,15 @@ GitHub Actions Triggered
         ↓
 Change Detection (app / terraform)
         ↓
-----------------------------------------
 If "app/" folder changes:
-    ↓
-Build & Deploy Application (based on pipeline logic)
-
+            ↓
+    Build & Deploy Application (based on pipeline logic)
+        ↓
 If "terraform/" folder changes:
-    ↓
-Run Terraform Plan (sadik branch)
-    ↓
-Plan output posted as PR comment
+            ↓
+    Run Terraform Plan (sadik branch)
+            ↓
+    Plan output posted as PR comment
         ↓
 Pull Request created to "master"
         ↓
@@ -403,23 +472,24 @@ Infrastructure changes applied to AWS (Production)
 
 **Deployment Process If App Changes**
 
-- Pipeline triggers only when files inside app/ are modified
+- Pipeline triggers only when files inside ```app``` are modified
 - Builds and deploys application
 - No Terraform execution is triggered
 
 **Deployment Process If Infrastructure Changes**
 
-- Pipeline triggers only when files inside terraform/ are modified
-- On push to sadik branch terraform plan is executed
+- Pipeline triggers only when files inside ```terraform``` are modified
+- On push to ```sadik``` branch terraform plan is executed
 - Plan output is automatically posted as a Pull Request comment
 - Terraform apply runs in production environment on merge to master
 
 **Safety & Control Mechanisms**
-- Terraform apply only runs on master branch
+- Terraform apply only runs on ```master``` branch
 - All infrastructure changes require PR review and approval
 - Plan output is always visible in PR comments before merge
 - Separation of app and infra pipelines prevents unintended deployments
 
+<br>
 
 ### <a name="09">Conclusion</a>
 This project demonstrates the design and implementation of a production-grade DevOps platform on AWS using modern tools and industry-standard workflows.
