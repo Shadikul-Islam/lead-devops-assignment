@@ -14,6 +14,7 @@
 | 08 | [Infrastructure Deployment & CI/CD Pipeline](#08)  |
 | 09 | [Conclusion](#09)  |
 <br>
+
 ### <a name="01">Project Overview and Requirements</a>
 
 **Objective**
@@ -48,6 +49,7 @@ Kubernetes cluster.
 - A `README.md` file including an architecture overview, key assumptions, and step-by-step deployment
 instructions.
 <br>
+
 ### <a name="02">Introduction</a>
 
 This project implements a production-ready cloud-native deployment pipeline for a Node.js application using Infrastructure as Code (IaC), Kubernetes, and CI/CD automation. The focus is on building a scalable, secure, and fully automated delivery workflow using modern DevOps practices.
@@ -59,7 +61,7 @@ The application is containerized using Docker and deployed to Kubernetes using H
 A CI/CD pipeline is implemented using GitHub Actions for both application and infrastructure workflows. Infrastructure changes follow a pull request-based model where Terraform runs a plan on PR creation, and apply is executed automatically after merge, ensuring controlled and auditable infrastructure changes. Application delivery is also automated through build, image push to ECR, and deployment to EKS.
 
 Overall, this project demonstrates a real-world DevOps architecture focused on automation, security, and operational efficiency using industry-standard cloud-native tools.
-
+<br>
 
 ### <a name="03">Tools & Technologies Used</a>
 
@@ -101,7 +103,7 @@ Overall, this project demonstrates a real-world DevOps architecture focused on a
 - IAM Roles & Policies
 - Kubernetes RBAC
 - aws-auth ConfigMap (EKS access management)
-
+<br>
 
 ### <a name="04">Project Structure</a>
 
@@ -162,7 +164,7 @@ If you navigate to the **Actions** tab, you will find the CI/CD pipelines that a
 In the **Pull Requests** section, you can observe the branch-based workflow in action. Feature changes are developed in the `sadik` branch and then merged into the `master` branch through a controlled review process. Each pull request typically includes Terraform plan output as a comment, allowing reviewers to clearly understand the infrastructure changes before approval.
 
 This structure ensures transparency, traceability, and controlled deployment across the entire system.
-
+<br>
 
 ### <a name="06">Setup and Deployment Process</a>
 
@@ -415,7 +417,7 @@ This project follows modern DevOps and cloud-native practices to ensure scalabil
 - Kubernetes orchestration for container workloads
 - Amazon EKS (Elastic Kubernetes Service) cluster operations
 - Helm package management for Kubernetes deployments
-
+<br>
 
 ### <a name="08">Infrastructure Deployment & CI/CD Pipeline</a>
 
@@ -476,7 +478,7 @@ Infrastructure changes applied to AWS (Production)
 - All infrastructure changes require PR review and approval
 - Plan output is always visible in PR comments before merge
 - Separation of app and infra pipelines prevents unintended deployments
-
+<br>
 
 ### <a name="09">Conclusion</a>
 This project demonstrates the design and implementation of a production-grade DevOps platform on AWS using modern tools and industry-standard workflows.
