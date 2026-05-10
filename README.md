@@ -63,18 +63,16 @@ A CI/CD pipeline is implemented using GitHub Actions for both application and in
 Overall, this project demonstrates a real-world DevOps architecture focused on automation, security, and operational efficiency using industry-standard cloud-native tools.
 
 <br>
-
 ### <a name="03">Tools & Technologies Used</a>
 
 **Cloud Platform**
 - Amazon Web Services (AWS)
-<br>
+
 **Infrastructure as Code**
 - Terraform
 - Terraform Modules (VPC, EKS, ECR, IAM, GitHub OIDC)
 - Remote state management (S3 + DynamoDB)
 
-<br>
 **Containerization**
 - Docker
 
