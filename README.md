@@ -12,7 +12,8 @@
 | 06 | [Setup and Deployment Process](#06)  |
 | 07 | [Production Concepts Implemented](#07)  |
 | 08 | [Infrastructure Deployment & CI/CD Pipeline](#08)  |
-| 09 | [Conclusion](#09)  |
+| 09 | [Destroy Infrastructure Using Terraform](#09)  |
+| 10 | [Conclusion](#10)  |
 <br>
 
 ### <a name="01">Project Overview and Requirements</a>
@@ -480,7 +481,71 @@ Infrastructure changes applied to AWS (Production)
 - Separation of app and infra pipelines prevents unintended deployments
 <br>
 
-### <a name="09">Conclusion</a>
+### <a name="09">Destroy Infrastructure Using Terraform</a>
+
+**Move into Terraform environment**
+
+```cd /home/ubuntu/dev/terraform/environments/prod```
+
+**Review Existing Infrastructure**
+
+```terraform state list```
+
+<img src= "https://github.com/Shadikul-Islam/lead-devops-assignment/blob/master/images/image4.png">
+<br>
+
+**Preview Resources That Will Be Destroyed**
+
+```terraform plan -destroy```
+
+<img src= "https://github.com/Shadikul-Islam/lead-devops-assignment/blob/master/images/image5.png">
+<br>
+
+**Destroy Entire Infrastructure**
+
+```terraform destroy```
+
+**Auto Approve Destroy**
+
+```terraform destroy -auto-approve```
+
+**Verify Resources Are Removed**
+
+**Check EKS Cluster**
+
+```aws eks list-clusters --region ap-south-1```
+
+**Check EC2 Instances**
+
+```bash
+aws ec2 describe-instances \
+  --region ap-south-1 \
+  --query "Reservations[*].Instances[*].[InstanceId,State.Name]" \
+  --output table
+```
+
+**Check Remaining VPCs**
+
+```bash
+aws ec2 describe-vpcs \
+  --region ap-south-1 \
+  --output table
+```
+
+**Remove Terraform State Lock Table**
+
+```bash
+aws dynamodb delete-table \
+  --table-name terraform-state-lock \
+  --region ap-south-1
+```
+
+**Remove Terraform State Bucket**
+
+```aws s3 rb s3://shadikul-terraform-state-001 --force```
+<br>
+
+### <a name="10">Conclusion</a>
 This project demonstrates the design and implementation of a production-grade DevOps platform on AWS using modern tools and industry-standard workflows.
 
 The focus goes beyond simple application deployment and emphasizes real-world engineering practices, including:
