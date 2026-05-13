@@ -115,6 +115,11 @@ Overall, this project demonstrates a real-world DevOps architecture focused on a
 │   ├── index.js
 │   ├── package-lock.json
 │   └── package.json
+├── .github
+│   └── workflows
+│       ├── deploy.yml
+│       ├── terraform-apply.yml
+│       └── terraform-plan.yml
 ├── helm
 │   └── nodejs-app
 │       ├── Chart.yaml
@@ -134,6 +139,7 @@ Overall, this project demonstrates a real-world DevOps architecture focused on a
     │       ├── main.tf
     │       ├── outputs.tf
     │       ├── providers.tf
+    │       ├── .terraform.lock.hcl
     │       ├── terraform-plan-output.txt
     │       ├── terraform.tfvars
     │       ├── tfplan
